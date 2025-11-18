@@ -8,7 +8,12 @@ import { loginSchema } from '@auth/schemes/signin';
 import { IAuthDocument } from '@auth/interfaces/auth.interface';
 import { BadRequestError } from '@global/helpers/error-handler';
 import { userService } from '../../../shared/services/db/user.service';
-import { IUserDocument } from '../../user/interfaces/user.interfaces';
+import { IResetPasswordParams, IUserDocument } from '../../user/interfaces/user.interfaces';
+import { forgotPasswordTemplate } from '@root/shared/services/emails/templates/forgot-password/forgot-password-template';
+import { emailQueue } from '@root/shared/services/queues/email.queue';
+import moment from 'moment';
+import publicIp from 'ip'
+import { resetPasswordTemplate } from '@root/shared/services/emails/templates/reset-password/reset-password-template';
 
 export class SignIn {
   @joiValidation(loginSchema)
@@ -38,6 +43,16 @@ export class SignIn {
       },
       config.JWT_TOKEN!,
     );
+
+    const templateParams: IResetPasswordParams = {
+      username: existingUser.username!,
+      email: existingUser.email!,
+      ipaddress: publicIp.address(),
+      date: moment().format('DD/MM/YYYY HH:mm')
+    }
+
+    const template:string = resetPasswordTemplate.passwordResetConfirmationTemplate(templateParams);
+    emailQueue.addEmailJob('forgotPasswordEmail', {template, receiverEmail: 'mike.murray51@ethereal.email', subject: 'confirmação de redefinição de senha.'});
     req.session = { jwt: userJwt };
     const userDocument: IUserDocument = {
       ...user,
@@ -49,7 +64,7 @@ export class SignIn {
       createdAt: existingUser!.createdAt,
     } as IUserDocument;
     res.status(HTTP_STATUS.OK).json({
-      message: 'User login successfully',
+      message: 'Login do usuário realizado com sucesso',
       user: userDocument,
       token: userJwt,
     });

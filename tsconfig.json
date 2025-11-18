@@ -23,6 +23,7 @@
        {"transform": "typescript-transform-paths"} ,
        {"transform": "typescript-transform-paths", "afterDeclarations": true},
       ],
+      "types": ["jest", "node"],
       "paths": {
         "@auth/*": ["src/features/auth/*"],
         "@user/*": ["src/features/user/*"],
@@ -34,9 +35,10 @@
         "@image/*": ["src/features/images/*"],
         "@chat/*": ["src/features/chat/*"],
         "@global/*": ["src/shared/globals/*"],
-        "@service/*": ["src/shared/sevices/*"],
+        "@service/*": ["src/shared/services/*"],
         "@socket/*": ["src/shared/sockets/*"],
         "@worker/*": ["src/shared/workers/*"],
+        "@mock/*": ["src/mocks/*"],
         "@root/*": ["src/*"],
       }
     }

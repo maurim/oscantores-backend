@@ -5,7 +5,7 @@ import { ExpressAdapter } from '@bull-board/express';
 import { BullAdapter } from '@bull-board/api/bullAdapter';
 import { config } from '@root/config';
 import { IAuthJob } from '@auth/interfaces/auth.interface';
-//import { IEmailJob, IUserJob } from '@user/interfaces/user.interface';
+import { IEmailJob, IUserJob } from '@user/interfaces/user.interfaces';
 //import { IPostJobData } from '@post/interfaces/post.interface';
 //import { IReactionJob } from '@reaction/interfaces/reaction.interface';
 //import { ICommentJob } from '@comment/interfaces/comment.interface';
@@ -14,7 +14,7 @@ import { IAuthJob } from '@auth/interfaces/auth.interface';
 //import { IFileImageJobData } from '@image/interfaces/image.interface';
 //import { IChatJobData, IMessageData } from '@chat/interfaces/chat.interface';
 
-type IBaseJobData = IAuthJob;
+type IBaseJobData = IAuthJob | IEmailJob;
 //| IEmailJob
 //| IPostJobData
 //| IReactionJob
