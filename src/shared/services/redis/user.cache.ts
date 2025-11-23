@@ -14,6 +14,18 @@ import { Helpers } from '@global/helpers/helpers';
 const log: Logger = config.createLogger('userCache');
 
 export class UserCache extends BaseCache {
+  getTotalUsersInCache(): number | PromiseLike<number> {
+    throw new Error('Method not implemented.');
+  }
+  getUsersFromCache(newSkip: number, limit: number, userId: string): IUserDocument[] | PromiseLike<IUserDocument[]> {
+    throw new Error('Method not implemented.');
+  }
+  getRandomUsersFromCache(arg0: string, username: string): IUserDocument[] | PromiseLike<IUserDocument[]> {
+    throw new Error('Method not implemented.');
+  }
+  updateSingleUserItemInCache(arg0: string, arg1: string, body: any) {
+    throw new Error('Method not implemented.');
+  }
   constructor() {
     super('userCache');
   }
@@ -72,13 +84,11 @@ export class UserCache extends BaseCache {
       if (!this.client.isOpen) {
         await this.client.connect();
       }
-      await this.client.ZADD('user', {
-        score: parseInt(userUId, 10),
-        value: `${key}`,
-      });
-      for (const [itemKey, itemValue] of Object.entries(dataToSave)) {
+      await this.client.ZADD('user', { score: parseInt(userUId, 10), value: `${key}` });
+      await this.client.HSET(`users:${key}`, dataToSave);
+     /* for (const [itemKey, itemValue] of Object.entries(dataToSave)) {
         await this.client.HSET(`users:${key}`, `${itemKey}`, `${itemValue}`);
-      }
+      } */
     } catch (error) {
       log.error(error);
       throw new ServerError('Server error. Try again.');

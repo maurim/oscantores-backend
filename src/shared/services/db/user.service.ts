@@ -12,6 +12,21 @@ import { indexOf } from 'lodash';
 //import { AuthModel } from '@auth/models/auth.schema';
 
 class UserService {
+  getTotalUsersInDB(): number | PromiseLike<number> {
+    throw new Error('Method not implemented.');
+  }
+  getAllUsers(userId: string, skip: number, limit: number): any {
+    throw new Error('Method not implemented.');
+  }
+  getRandomUsers(userId: string): IUserDocument[] | PromiseLike<IUserDocument[]> {
+    throw new Error('Method not implemented.');
+  }
+  updatePassword(arg0: string, hashedPassword: string) {
+    throw new Error('Method not implemented.');
+  }
+  searchUsers(regex: RegExp): ISearchUser[] | PromiseLike<ISearchUser[]> {
+    throw new Error('Method not implemented.');
+  }
   public async addUserData(data: IUserDocument): Promise<void> {
     await UserModel.create(data);
   }
