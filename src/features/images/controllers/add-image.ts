@@ -6,7 +6,7 @@ import { addImageSchema } from '@image/schemes/images';
 import { uploads } from '@global/helpers/cloudinary-upload';
 import { UploadApiResponse } from 'cloudinary';
 import { BadRequestError } from '@global/helpers/error-handler';
-import { IUserDocument } from '@user/interfaces/user.interface';
+import { IUserDocument } from '@user/interfaces/user.interfaces';
 import { socketIOImageObject } from '@socket/image';
 import { imageQueue } from '@service/queues/image.queue';
 import { IBgUploadResponse } from '@image/interfaces/image.interface';
@@ -26,7 +26,7 @@ export class Add {
       `${req.currentUser!.userId}`,
       'profilePicture',
       url
-    )) as IUserDocument;
+    )) as any as IUserDocument;
     socketIOImageObject.emit('update user', cachedUser);
     imageQueue.addImageJob('addUserProfileImageToDB', {
       key: `${req.currentUser!.userId}`,
@@ -44,12 +44,12 @@ export class Add {
       `${req.currentUser!.userId}`,
       'bgImageId',
       publicId
-    ) as Promise<IUserDocument>;
+    ) as any as Promise<IUserDocument>;
     const bgImageVersion: Promise<IUserDocument> = userCache.updateSingleUserItemInCache(
       `${req.currentUser!.userId}`,
       'bgImageVersion',
       version
-    ) as Promise<IUserDocument>;
+    ) as any as Promise<IUserDocument>;
     const response: [IUserDocument, IUserDocument] = (await Promise.all([bgImageId, bgImageVersion])) as [IUserDocument, IUserDocument];
     socketIOImageObject.emit('update user', {
       bgImageId: publicId,

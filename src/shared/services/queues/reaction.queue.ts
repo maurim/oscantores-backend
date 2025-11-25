@@ -10,7 +10,7 @@ class ReactionQueue extends BaseQueue {
   }
 
   public addReactionJob(name: string, data: IReactionJob): void {
-   // this.addJob(name, data);
+    this.addJob(name, data);
   }
 }
 

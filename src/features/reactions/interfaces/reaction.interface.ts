@@ -2,7 +2,7 @@ import { ObjectId } from 'mongodb';
 import { Document } from 'mongoose';
 
  export interface IReactionDocument extends Document {
-  _id: string | ObjectId;
+  _ids?: any | string | ObjectId;
   username: string;
   avataColor: string;
   type: string;

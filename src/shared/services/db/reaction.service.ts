@@ -4,22 +4,45 @@ import { PostModel } from '@post/models/post.schema';
 import { IQueryReaction, IReactionDocument, IReactionJob } from '@reaction/interfaces/reaction.interface';
 import { ReactionModel } from '@reaction/models/reaction.schema';
 import { UserCache } from '@service/redis/user.cache';
-import { IUserDocument } from '@user/interfaces/user.interface';
+import { IUserDocument } from '@user/interfaces/user.interfaces';
 import { omit } from 'lodash';
 import mongoose from 'mongoose';
-import { INotificationDocument, INotificationTemplate } from '@notification/interfaces/notification.interface';
-import { NotificationModel } from '@notification/models/notification.schema';
-import { socketIONotificationObject } from '@socket/notification';
-import { notificationTemplate } from '@service/emails/templates/notifications/notification-template';
+//import { INotificationDocument, INotificationTemplate } from '@notification/interfaces/notification.interface';
+//import { NotificationModel } from '@notification/models/notification.schema';
+//import { socketIONotificationObject } from '@socket/notification';
+//import { notificationTemplate } from '@service/emails/templates/notifications/notification-template';
 import { emailQueue } from '@service/queues/email.queue';
 
 const userCache: UserCache = new UserCache();
 
 class ReactionService {
+
   public async addReactionDataToDB(reactionData: IReactionJob): Promise<void> {
-    const { postId, userTo, userFrom, username, type, previousReaction, reactionObject } = reactionData;
+    const { postId, userTo, userFrom, username, type, previousReaction, reactionObject, } = reactionData;
     let updatedReactionObject: IReactionDocument = reactionObject as IReactionDocument;
     if (previousReaction) {
+      updatedReactionObject = omit(reactionObject, ["_ids"]);
+    }
+    const updatedReaction: [IUserDocument, IReactionDocument, IPostDocument] = (await Promise.all([
+      userCache.getUserFromCache(`${userTo}`),
+      ReactionModel.replaceOne({ postId, type: previousReaction, username }, updatedReactionObject, { upsert: true }),
+        PostModel.findOneAndUpdate(
+          { _id: postId },
+        {
+          $inc: {
+            [`reactions.${previousReaction}`]: -1,
+            [`reactions.${type}`]: 1
+          }
+        },
+        { new: true }
+        )
+    ])) as unknown as [IUserDocument, IReactionDocument, IPostDocument];
+  }
+
+ /* public async addReactionDataToDB(reactionData: IReactionJob): Promise<void> {
+    const { postId, userTo, userFrom, username, type, previousReaction, reactionObject } = reactionData;
+    let updatedReactionObject: IReactionDocument = reactionObject as IReactionDocument;
+   /* if (previousReaction) {
       updatedReactionObject = omit(reactionObject, ['_id']);
     }
     const updatedReaction: [IUserDocument, IReactionDocument, IPostDocument] = (await Promise.all([
@@ -67,18 +90,18 @@ class ReactionService {
         subject: 'Post reaction notification'
       });
     }
-  }
+  }*/
 
-  public async removeReactionDataFromDB(reactionData: IReactionJob): Promise<void> {
+  public async removeReactionDataFromDB(reactionData: IReactionJob): Promise<void>  {
     const { postId, previousReaction, username } = reactionData;
     await Promise.all([
       ReactionModel.deleteOne({ postId, type: previousReaction, username }),
-      PostModel.updateOne(
+      PostModel.findOneAndUpdate(
         { _id: postId },
         {
           $inc: {
             [`reactions.${previousReaction}`]: -1
-          }
+          },
         },
         { new: true }
       )
