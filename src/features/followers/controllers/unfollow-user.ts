@@ -22,6 +22,6 @@ export class Remove {
       keyOne: `${followeeId}`,
       keyTwo: `${followerId}`
     });
-    res.status(HTTP_STATUS.OK).json({ message: 'Unfollowed user now' });
+    res.status(HTTP_STATUS.OK).json({ message: 'Deixei de seguir este usuário.' });
   }
 }

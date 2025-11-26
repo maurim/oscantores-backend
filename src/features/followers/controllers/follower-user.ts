@@ -38,7 +38,7 @@ export class Add {
       username: req.currentUser!.username,
       followerDocumentId: followerObjectId
     });
-    res.status(HTTP_STATUS.OK).json({ message: 'Following user now' });
+    res.status(HTTP_STATUS.OK).json({ message: 'Seguindo o usuário' });
   }
 
   private userData(user: IUserDocument): IFollowerData {
