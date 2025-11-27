@@ -18,7 +18,7 @@ class UserWorker {
     }
   }
 
-  /* async updateUserInfo(job: Job, done: DoneCallback): Promise<void> {
+   async updateUserInfo(job: Job, done: DoneCallback): Promise<void> {
     try {
       const { key, value } = job.data;
       await userService.updateUserInfo(key, value);
@@ -52,7 +52,7 @@ class UserWorker {
       log.error(error);
       done(error as Error);
     }
-  } */
+  }
 }
 
 export const userWorker: UserWorker = new UserWorker();

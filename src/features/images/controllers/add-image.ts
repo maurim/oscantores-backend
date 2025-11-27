@@ -26,7 +26,7 @@ export class Add {
       `${req.currentUser!.userId}`,
       'profilePicture',
       url
-    )) as any as IUserDocument;
+    )) as IUserDocument;
     socketIOImageObject.emit('update user', cachedUser);
     imageQueue.addImageJob('addUserProfileImageToDB', {
       key: `${req.currentUser!.userId}`,
@@ -34,7 +34,7 @@ export class Add {
       imgId: result.public_id,
       imgVersion: result.version.toString()
     });
-    res.status(HTTP_STATUS.OK).json({ message: 'Image added successfully' });
+    res.status(HTTP_STATUS.OK).json({ message: 'Imagem adicionada com sucesso' });
   }
 
   @joiValidation(addImageSchema)
@@ -61,7 +61,7 @@ export class Add {
       imgId: publicId,
       imgVersion: version.toString()
     });
-    res.status(HTTP_STATUS.OK).json({ message: 'Image added successfully' });
+    res.status(HTTP_STATUS.OK).json({ message: 'Imagem adicionada com sucesso' });
   }
 
   private async backgroundUpload(image: string): Promise<IBgUploadResponse> {

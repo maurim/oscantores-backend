@@ -2,7 +2,7 @@ import mongoose, { Document } from 'mongoose';
 import { ObjectId } from 'mongodb';
 
 export interface IUserDocument extends Document {
-  _id: string | ObjectId;
+  _id: any | string | ObjectId;
   authId: string | ObjectId;
   username?: string;
   email?: string;

@@ -5,12 +5,12 @@ import { ServerError } from '@global/helpers/error-handler';
 import { ISavePostToCache, IPostDocument } from '@post/interfaces/post.interface';
 import { Helpers } from '@global/helpers/helpers';
 import { createClient, RedisClientType } from 'redis';
-//import {  RedisCommandRawReply } from '../../../../node_modules/@redis/client/dist/lib/commands';
+import {  RedisCommandRawReply } from '../../../../node_modules/@redis/client/dist/lib/commands';
 import { IReactions } from '@reaction/interfaces/reaction.interface';
 
 const log: Logger = config.createLogger('postCache');
 
-export type PostCacheMultiType = string | number | Buffer | IPostDocument | IPostDocument[];
+export type PostCacheMultiType = string | number | Buffer | RedisCommandRawReply[] | IPostDocument | IPostDocument[];
 
 export class PostCache extends BaseCache {
   constructor() {
@@ -201,7 +201,7 @@ export class PostCache extends BaseCache {
       return postReplies;
     } catch (error) {
       log.error(error);
-      throw new ServerError('Server error. Try again.');
+      throw new ServerError('Server error. getUserPostsFromCache Try again.');
     }
   }
 

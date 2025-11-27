@@ -5,10 +5,10 @@ import { PostModel } from '@post/models/post.schema';
 import mongoose, { Query } from 'mongoose';
 import { UserCache } from '@service/redis/user.cache';
 import { IUserDocument } from '@user/interfaces/user.interfaces';
-//import { NotificationModel } from '@notification/models/notification.schema';
-//import { INotificationDocument, INotificationTemplate } from '@notification/interfaces/notification.interface';
-//import { socketIONotificationObject } from '@socket/notification';
-//import { notificationTemplate } from '@service/emails/templates/notifications/notification-template';
+import { NotificationModel } from '@notification/models/notification.schema';
+import { INotificationDocument, INotificationTemplate } from '@notification/interfaces/notification.interface';
+import { socketIONotificationObject } from '@socket/notification';
+import { notificationTemplate } from '@service/emails/templates/notifications/notification-template';
 import { emailQueue } from '@service/queues/email.queue';
 
 const userCache: UserCache = new UserCache();
@@ -25,8 +25,8 @@ class CommentService {
     const user: Promise<IUserDocument> = userCache.getUserFromCache(userTo) as Promise<IUserDocument>;
     const response: [ICommentDocument, IPostDocument, IUserDocument] = await Promise.all([comments, post, user]);
 
-  /*  if (response[2].notifications.comments && userFrom !== userTo) {
-     // const notificationModel: INotificationDocument = new NotificationModel();
+    if (response[2].notifications.comments && userFrom !== userTo) {
+      const notificationModel: INotificationDocument = new NotificationModel();
       const notifications = await notificationModel.insertNotification({
         userFrom,
         userTo,
@@ -49,8 +49,8 @@ class CommentService {
         header: 'Comment Notification'
       };
       const template: string = notificationTemplate.notificationMessageTemplate(templateParams);
-      emailQueue.addEmailJob('commentsEmail', { receiverEmail: response[2].email!, template, subject: 'Post notification' });
-    } */
+      emailQueue.addEmailJob('commentsEmail', { receiverEmail: response[2].email!, template, subject: 'Publicar notificação' });
+    }
   }
 
   public async getPostComments(query: IQueryComment, sort: Record<string, 1 | -1>): Promise<ICommentDocument[]> {

@@ -45,9 +45,9 @@
     "lodash": "^4.17.21",
     "moment": "^2.30.1",
     "mongodb": "^7.0.0",
-    "mongoose": "^8.19.3",
+    "mongoose": "^7.0.0",
     "nodemailer": "^7.0.10",
-    "redis": "^5.9.0",
+    "redis": "^4.6.5",
     "socket.io": "^4.8.1",
     "typescript": "^5.9.3",
     "typescript-transform-paths": "^3.5.5"

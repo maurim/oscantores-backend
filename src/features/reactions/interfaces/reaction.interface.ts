@@ -33,7 +33,7 @@ export interface IReactions {
 }
 
 export interface IQueryReaction {
-  _id?: string | ObjectId;
+  _ids?: string | ObjectId;
   postId?: string | ObjectId;
 }
 

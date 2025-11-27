@@ -34,9 +34,9 @@ export class Update {
       date: moment().format('DD//MM//YYYY HH:mm')
     };
     const template: string = resetPasswordTemplate.passwordResetConfirmationTemplate(templateParams);
-    emailQueue.addEmailJob('changePassword', { template, receiverEmail: existingUser.email!, subject: 'Password update confirmation' });
+    emailQueue.addEmailJob('changePassword', { template, receiverEmail: existingUser.email!, subject: 'Confirmação de atualização de senha' });
     res.status(HTTP_STATUS.OK).json({
-      message: 'Password updated successfully. You will be redirected shortly to the login page.'
+      message: 'Senha atualizada com sucesso. Você será redirecionado em breve para a página de login.'
     });
   }
 }

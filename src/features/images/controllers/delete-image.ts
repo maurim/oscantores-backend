@@ -16,7 +16,7 @@ export class Delete {
     imageQueue.addImageJob('removeImageFromDB', {
       imageId
     });
-    res.status(HTTP_STATUS.OK).json({ message: 'Image deleted successfully' });
+    res.status(HTTP_STATUS.OK).json({ message: 'Imagem excluída com sucesso' });
   }
 
   public async backgroundImage(req: Request, res: Response): Promise<void> {
@@ -26,15 +26,15 @@ export class Delete {
       `${req.currentUser!.userId}`,
       'bgImageId',
       ''
-    ) as any as Promise<IUserDocument>;
+    ) as Promise<IUserDocument>;
     const bgImageVersion: Promise<IUserDocument> = userCache.updateSingleUserItemInCache(
       `${req.currentUser!.userId}`,
       'bgImageVersion',
       ''
-    ) as any as Promise<IUserDocument>;
+    ) as Promise<IUserDocument>;
     (await Promise.all([bgImageId, bgImageVersion])) as [IUserDocument, IUserDocument];
     imageQueue.addImageJob('removeImageFromDB', {
-    //  imageId: image?._id
+      imageId: image?._id
     });
     res.status(HTTP_STATUS.OK).json({ message: 'Imagem excluída com sucesso' });
   }

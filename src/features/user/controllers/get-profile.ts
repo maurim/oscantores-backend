@@ -101,9 +101,11 @@ export class Get {
     return totalUsers;
   }
 
- /* private async followers(userId: string): Promise<IFollowerData[]> {
+   /*private async followers(userId: string): Promise<IFollowerData[]>{
     const cachedFollowers: IFollowerData[] = await followerCache.getFollowersFromCache(`followers:${userId}`);
-    const result = cachedFollowers.length ? cachedFollowers : await followerService.getFollowerData(new mongoose.Types.ObjectId(userId));
-   return result;
+    const mongo: any | string = new mongoose.Types.ObjectId(userId);
+    const result = cachedFollowers.length ? cachedFollowers : await followerService.getFollowerData( mongo );
+    return result;
   } */
+
 }

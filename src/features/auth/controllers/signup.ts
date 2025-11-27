@@ -24,10 +24,9 @@ export class SignUp {
   @joiValidation(signupSchema)
   public async create(req: Request, res: Response): Promise<void> {
     const { username, email, password, avatarColor, avatarImage } = req.body;
-    const checkIfUserExist: IAuthDocument =
-      await authService.getUserByUsernameOrEmail(username, email);
+    const checkIfUserExist: IAuthDocument = await authService.getUserByUsernameOrEmail(username, email);
     if (checkIfUserExist) {
-      throw new BadRequestError('Invalid credentials');
+      throw new BadRequestError('Credenciais inválidas');
     }
 
     const authObjectId: ObjectId = new ObjectId();
@@ -44,34 +43,17 @@ export class SignUp {
       password,
       avatarColor,
     });
-    const result: UploadApiResponse = (await uploads(
-      avatarImage,
-      `${userObjectId}`,
-      true,
-      true,
-    )) as UploadApiResponse;
+    const result: UploadApiResponse = (await uploads(avatarImage, `${userObjectId}`, true, true)) as UploadApiResponse;
     if (!result?.public_id) {
-      throw new BadRequestError(
-        'Envio do arquivo: Ocorreu um erro. Tente novamente..',
-      );
+      throw new BadRequestError('Envio do arquivo: Ocorreu um erro. Tente novamente..');
     }
 
     // Add to redis cache
-    const userDataForCache: IUserDocument = SignUp.prototype.userData(
-      authData,
-      userObjectId,
-    );
+    const userDataForCache: IUserDocument = SignUp.prototype.userData(authData, userObjectId);
     userDataForCache.profilePicture = `https://res.cloudinary.com/dyamr9ym3/image/upload/v${result.version}/${userObjectId}`;
     await userCache.saveUserToCache(`${userObjectId}`, uId, userDataForCache);
 
     // Add to database
-    omit(userDataForCache, [
-      'uId',
-      'username',
-      'email',
-      'avatarColor',
-      'password',
-    ]);
     authQueue.addAuthUserJob('addAuthUserToDB', { value: authData });
     userQueue.addUserJob('addUserToDB', { value: userDataForCache });
 
