@@ -15,7 +15,8 @@ export class Get {
     if (cachedList.length) {
       list = cachedList;
     } else {
-     // list = await chatService.getUserConversationList(new mongoose.Types.ObjectId(req.currentUser!.userId));
+      const curs: string | any = new mongoose.Types.ObjectId(req.currentUser!.userId);
+      list = await chatService.getUserConversationList(curs);
     }
 
     res.status(HTTP_STATUS.OK).json({ message: 'User conversation list', list });
@@ -29,13 +30,15 @@ export class Get {
     if (cachedMessages.length) {
       messages = cachedMessages;
     } else {
-     // messages = await chatService.getMessages(
-       // new mongoose.Types.ObjectId(req.currentUser!.userId),
-      //  new mongoose.Types.ObjectId(receiverId),
-      //  { createdAt: 1 }
-     // );
+      const reqs: string | any = new mongoose.Types.ObjectId(req.currentUser!.userId);
+      const recs: string | any = new mongoose.Types.ObjectId(receiverId);
+      messages = await chatService.getMessages(
+        reqs,
+        recs,
+        { createdAt: 1 }
+      );
     }
 
-    res.status(HTTP_STATUS.OK).json({ message: 'User chat messages', messages });
+    res.status(HTTP_STATUS.OK).json({ message: 'Mensagens de bate-papo do usuário', messages });
   }
 }

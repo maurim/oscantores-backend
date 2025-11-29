@@ -14,7 +14,7 @@ class HealthRoutes {
 
   public health(): Router {
     this.router.get('/health', (req: Request, res: Response) => {
-      res.status(HTTP_STATUS.OK).send(`Health: Server instance is healthy with process id ${process.pid} on ${moment().format('LL')}`);
+      res.status(HTTP_STATUS.OK).send(`Saúde: A instância do servidor está íntegra com o ID do processo ${process.pid} on ${moment().format('LL')}`);
     });
 
     return this.router;
@@ -48,17 +48,15 @@ class HealthRoutes {
       const start: number = performance.now();
       const result: number = this.fibo(parseInt(num, 10));
       const end: number = performance.now();
-      const response = await axios({
-        method: 'get',
+     // const response = await axios({
+      //  method: 'get',
       //  url: config.EC2_URL
-      });
+    //  });
       res
         .status(HTTP_STATUS.OK)
         .send(
-          `Fibonacci series of ${num} is ${result} and it took ${end - start}ms and runs with process id ${process.pid} on ${
-            response.data
-          } at ${moment().format('LL')}`
-        );
+          `Fibonacci series of ${num} is ${result} and it took ${end - start}ms and runs with process id ${process.pid} on ${moment().format('LL')}`)
+        ;
     });
 
     return this.router;

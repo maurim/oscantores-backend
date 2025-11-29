@@ -12,7 +12,7 @@ class ChatQueue extends BaseQueue {
   }
 
   public addChatJob(name: string, data: IChatJobData | IMessageData): void {
-   // this.addJob(name, data);
+    this.addJob(name, data);
 
   }
 }

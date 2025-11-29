@@ -4,8 +4,7 @@ import { config } from '@root/config';
 import { ServerError } from '@global/helpers/error-handler';
 import { ISavePostToCache, IPostDocument } from '@post/interfaces/post.interface';
 import { Helpers } from '@global/helpers/helpers';
-import { createClient, RedisClientType } from 'redis';
-import {  RedisCommandRawReply } from '../../../../node_modules/@redis/client/dist/lib/commands';
+import { RedisCommandRawReply } from '@redis/client/dist/lib/commands';
 import { IReactions } from '@reaction/interfaces/reaction.interface';
 
 const log: Logger = config.createLogger('postCache');
@@ -40,7 +39,6 @@ export class PostCache extends BaseCache {
       createdAt
     } = createdPost;
 
-
     const dataToSave = {
       '_id': `${_id}`,
       'userId': `${userId}`,
@@ -67,13 +65,12 @@ export class PostCache extends BaseCache {
         await this.client.connect();
       }
 
-      const postCount: string | any [] = await this.client.HMGET(`users:${currentUserId}`, 'postsCount');
+      const postCount: string[] = await this.client.HMGET(`users:${currentUserId}`, 'postsCount');
       const multi: ReturnType<typeof this.client.multi> = this.client.multi();
-      multi.ZADD('post', { score: parseInt(uId, 10), value: `${key}` });
-      for(const [itemKey, itemValue] of Object.entries(dataToSave)){
-         multi.HSET(`posts:${key}`, `${itemKey}`, `${itemValue}`);
+      await this.client.ZADD('post', { score: parseInt(uId, 10), value: `${key}` });
+      for(const [itemKey, itemValue] of Object.entries(dataToSave)) {
+        multi.HSET(`posts:${key}`, `${itemKey}`, `${itemValue}`);
       }
-
       const count: number = parseInt(postCount[0], 10) + 1;
       multi.HSET(`users:${currentUserId}`, 'postsCount', count);
       multi.exec();
@@ -201,7 +198,7 @@ export class PostCache extends BaseCache {
       return postReplies;
     } catch (error) {
       log.error(error);
-      throw new ServerError('Server error. getUserPostsFromCache Try again.');
+      throw new ServerError('Server error. Try again.');
     }
   }
 
@@ -223,7 +220,7 @@ export class PostCache extends BaseCache {
       if (!this.client.isOpen) {
         await this.client.connect();
       }
-      const postCount: string | any [] = await this.client.HMGET(`users:${currentUserId}`, 'postsCount');
+      const postCount: string[] = await this.client.HMGET(`users:${currentUserId}`, 'postsCount');
       const multi: ReturnType<typeof this.client.multi> = this.client.multi();
       multi.ZREM('post', `${key}`);
       multi.DEL(`posts:${key}`);

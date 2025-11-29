@@ -34,7 +34,7 @@ export class Update {
     const postUpdated: IPostDocument = await postCache.updatePostInCache(postId, updatedPost);
     socketIOPostObject.emit('update post', postUpdated, 'posts');
     postQueue.addPostJob('updatePostInDB', { key: postId, value: postUpdated });
-    res.status(HTTP_STATUS.OK).json({ message: 'Postagem atualizada com sucesso' });
+    res.status(HTTP_STATUS.OK).json({ message: 'Post updated successfully' });
   }
 
   @joiValidation(postWithImageSchema)
@@ -48,7 +48,7 @@ export class Update {
         throw new BadRequestError(result.message);
       }
     }
-    res.status(HTTP_STATUS.OK).json({ message: 'Postagem com imagem atualizada com sucesso' });
+    res.status(HTTP_STATUS.OK).json({ message: 'Post with image updated successfully' });
   }
 
   @joiValidation(postWithVideoSchema)
@@ -62,7 +62,7 @@ export class Update {
         throw new BadRequestError(result.message);
       }
     }
-    res.status(HTTP_STATUS.OK).json({ message: 'Postagem com vídeo atualizada com sucesso' });
+    res.status(HTTP_STATUS.OK).json({ message: 'Post with video updated successfully' });
   }
 
   private async updatePost(req: Request): Promise<void> {

@@ -137,6 +137,6 @@ export class Create {
       createdPost
     });
     postQueue.addPostJob('addPostToDB', { key: req.currentUser!.userId, value: createdPost });
-    res.status(HTTP_STATUS.CREATED).json({ message: 'Post created with video successfully' });
+    res.status(HTTP_STATUS.CREATED).json({ message: 'Postagem criada com vídeo com sucesso' });
   }
 }

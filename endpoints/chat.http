@@ -38,8 +38,8 @@ Accept: application/json
 withCredentials: true
 
 {
-  "userOne": "",
-  "userTwo": ""
+  "userOne": "692706718c4514a49bb172a5",
+  "userTwo": "6926123b4cd6717bfd7c7894"
 }
 
 ###
